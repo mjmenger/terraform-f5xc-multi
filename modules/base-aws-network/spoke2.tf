@@ -102,7 +102,21 @@ resource "aws_security_group" "f5-xc-spoke2-vpc" {
     cidr_blocks = ["192.168.0.0/16"]
   }
 
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
+  ingress {
+    from_port   = 4500
+    to_port     = 4500
+    protocol    = "UDP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  
   ingress {
     from_port   = 0
     to_port     = 0
