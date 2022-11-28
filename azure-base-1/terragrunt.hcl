@@ -8,7 +8,7 @@ terraform {
 
 inputs = {
   azureRegion                = "westus2"
-  buildSuffix                = "null"
+  buildSuffix                = "env1"
   resourceGroup              = "f5demo_rg"
   location                   = "westus2"
   servicesVnetAddressSpace   = "100.64.16.0/20"
