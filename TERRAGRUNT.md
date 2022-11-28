@@ -51,6 +51,11 @@ Review the dependencies interpreted by Terragrunt
 ```shell
 terragrunt graph-dependencies
 ```
+Run terragrunt across all of the sub-projects, limiting concurrency to 1 due to occasional race conditions
+```shell
+terragrunt run-all apply --terragrunt-parallelism 1
+```
+
 
 ## Run Terragrunt for a single AWS Site
 
