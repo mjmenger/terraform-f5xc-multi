@@ -81,7 +81,7 @@ dependency "infrastructure" {
 
 inputs = {
     instanceSuffix       = "2"
-    awsRegion            = "us-west-2"
+    awsRegion            = dependency.infrastructure.outputs.awsRegion
     awsAz1               = dependency.infrastructure.outputs.awsAz1
     awsAz2               = dependency.infrastructure.outputs.awsAz2
     awsAz3               = dependency.infrastructure.outputs.awsAz3
