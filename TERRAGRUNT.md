@@ -56,6 +56,15 @@ Run terragrunt across all of the sub-projects, limiting concurrency to 1 due to 
 terragrunt run-all apply --terragrunt-parallelism 1
 ```
 
+## Errors
+In case of the following Azure error
+```text
+Error: compute.VirtualMachinesClient#CreateOrUpdate: Failure sending request: StatusCode=400 -- Original Error: Code="ResourcePurchaseValidationFailed" Message="User failed validation to purchase resources. Error message: 'You have not accepted the legal terms on this subscription: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' for this plan. Before the subscription can be used, you need to accept the legal terms of the image. To read and accept legal terms, use the Azure CLI commands described at https://go.microsoft.com/fwlink/?linkid=2110637 or the PowerShell commands available at https://go.microsoft.com/fwlink/?linkid=862451. Alternatively, deploying via the Azure portal provides a UI experience for reading and accepting the legal terms. Offer details: publisher='volterraedgeservices' offer = 'entcloud_voltmesh_voltstack_node', sku = 'freeplan_entcloud_voltmesh_voltstack_node_multinic', Correlation Id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.'"
+```
+use this command with the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
+```shell
+az vm image accept-terms --offer entcloud_voltmesh_voltstack_node --publisher volterraedgeservices --plan freeplan_entcloud_voltmesh_voltstack_node_multinic
+```
 
 ## Run Terragrunt for a single AWS Site
 
@@ -520,6 +529,10 @@ Are you sure you want to run 'terragrunt apply' in each folder of the stack desc
 
 If you want to execute the ```terragrunt apply``` commands discretely, you can cd into each of the subdirectories and enter ```terragrunt apply```.
 
+If you encounter errors that may be the consequence of race conditions between the modules, consider limiting concurrent execution with [`--terragrunt-parallelism`](https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-parallelism). For example,
+```shell
+terragrunt run-all apply --terragrunt-parallelism 1
+```
 
 
 
