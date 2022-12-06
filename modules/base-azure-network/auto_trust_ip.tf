@@ -1,5 +1,5 @@
 locals {
-    auto_trusted_cidr = var.auto_trust_localip ? ["${jsondecode(data.http.myip[0].body).ip}/32"] : []
+    auto_trusted_cidr = var.auto_trust_localip ? ["${jsondecode(data.http.myip[0].response_body).ip}/32"] : []
     # trusted CIDRs are a combination of CIDRs manually set through a tfvar
     # the CIDR of the VPC, and an automatically discovered CIDR if enabled
     # by auto_trust_localip
