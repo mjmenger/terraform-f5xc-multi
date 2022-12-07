@@ -3,7 +3,18 @@ include "root" {
 }
 
 terraform {
-  source = "github.com/cklewar/f5-xc-modules//f5xc/site/aws/tgw"
+  source = "github.com/mjmenger/f5-xc-modules//f5xc/site/aws/tgw"
+}
+
+# Indicate what region to deploy the resources into
+generate "provider" {
+  path = "provider.tf"
+  if_exists = "overwrite_terragrunt"
+  contents = <<EOF
+provider "aws" {
+  region = "us-east-1"
+}
+EOF
 }
 
 dependencies {
@@ -81,11 +92,23 @@ dependency "infrastructure" {
 
 inputs = {
     instanceSuffix                 = "1"
-    f5xc_aws_region                = "us-east-1"
+    f5xc_aws_region                = dependency.infrastructure.outputs.awsRegion
     f5xc_aws_tgw_name              = "tgt-newmodule"
     f5xc_aws_default_ce_os_version = true
     f5xc_aws_default_ce_sw_version = true
     f5xc_aws_tgw_no_worker_nodes   = true
+    f5xc_aws_tgw_az_nodes = {
+        node0 : {
+          f5xc_aws_tgw_workload_subnet             = "192.168.168.0/24", f5xc_aws_tgw_outside_subnet = "192.168.169.0/24"
+          f5xc_aws_tgw_az_name                     = "us-east-2a"
+          f5xc_aws_tgw_workload_existing_subnet_id = "subnet-0627537aadef37e68"
+          f5xc_aws_tgw_outside_existing_subnet_id  = "subnet-04a82f3f85b1e772d"
+          f5xc_aws_tgw_inside_existing_subnet_id   = "subnet-0627537aadef37e68"
+        }
+      }
+    custom_tags = { 
+        Owner = "m.menger@f5.com"
+      }
     awsRegion                      = dependency.infrastructure.outputs.awsRegion
     awsAz1                         = dependency.infrastructure.outputs.awsAz1
     awsAz2                         = dependency.infrastructure.outputs.awsAz2
